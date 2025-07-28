@@ -17,4 +17,13 @@ class UserController @Inject()(userService: UserService, cc: ControllerComponent
       Ok(Json.obj("id" -> id))
     }
   }
+
+  def login = Action.async(parse.json) { request =>
+    val email = (request.body \ "email").as[String]
+    val password = (request.body \ "password").as[String]
+    userService.login(email, password).map {
+      case Some(token) => Ok(Json.obj("token" -> token))
+      case None => Unauthorized("Invalid credentials")
+    }
+  }
 }

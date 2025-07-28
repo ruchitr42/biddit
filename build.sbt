@@ -24,11 +24,13 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http" % "10.2.6",          // Optional, compatible with 2.6.x
 
   // ✅ Other libraries (optional additions)
-  "com.github.t3hnar" %% "scala-bcrypt" % "4.3.0",        // For password hashing
-  "com.pauldijou" %% "jwt-play" % "5.0.0",                // JWT support (works with Play 2.8.x)
+//  "com.github.t3hnar" %% "scala-bcrypt" % "4.3.0",        // For password hashing
+//  "com.pauldijou" %% "jwt-play" % "5.0.0",                // JWT support (works with Play 2.8.x)
 
   // ✅ Testing
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
+  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
+
+  "com.auth0" % "java-jwt" % "3.18.1"
 )
 
 // Optional: Override dependency conflicts
