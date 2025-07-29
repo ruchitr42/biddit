@@ -16,9 +16,6 @@ libraryDependencies ++= Seq(
   // Akka
   "com.typesafe.akka" %% "akka-actor-typed" % "2.6.20",
   "com.typesafe.akka" %% "akka-stream" % "2.6.20",
-  // JWT and Password Hashing
-  "com.auth0" % "java-jwt" % "3.18.1",
-  "org.mindrot" % "jbcrypt" % "0.4", // Fixed to valid version
   // Testing
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )

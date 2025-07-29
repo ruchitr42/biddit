@@ -9,7 +9,7 @@ class Posts(tag: Tag) extends Table[Post](tag, "posts") {
   def title = column[String]("title")
   def content = column[String]("content")
   def status = column[String]("status")
-  def postType = column[String]("type")
+  def postType = column[String]("postType")
   def createdAt = column[Timestamp]("created_at")
   def updatedAt = column[Timestamp]("updated_at")
   def publishedAt = column[Option[Timestamp]]("published_at")

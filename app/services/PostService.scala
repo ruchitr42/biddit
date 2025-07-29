@@ -7,6 +7,7 @@ import scala.concurrent.Future
 import play.api.db.slick.DatabaseConfigProvider
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
+import play.api.Logger
 
 case class ProductDetailInput(
                                productDetails: String,
@@ -27,17 +28,23 @@ case class RemainingBidTime(hours: Int, minutes: Int)
 
 class PostService @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
   val db = dbConfigProvider.get.db
+  private val logger = Logger(this.getClass)
 
   def createPost(userId: Long, title: String, content: String, status: String, postType: String, productDetails: Option[ProductDetailInput]): Future[Either[String, Long]] = {
     val now = new Timestamp(System.currentTimeMillis())
     val post = Post(0, userId, title, content, status, postType, now, now, if (status == "published") Some(now) else None)
+    logger.info(s"Creating post for userId: $userId, postType: $postType, title: $title")
+
     val action = for {
       userExists <- Users.query.filter(_.id === userId).exists.result
+      _ = logger.debug(s"User exists: $userExists")
       result <- if (userExists) {
         for {
           postId <- Posts.query returning Posts.query.map(_.id) += post
+          _ = logger.debug(s"Inserted post with ID: $postId")
           _ <- productDetails match {
             case Some(details) if postType == "product" =>
+              logger.debug(s"Inserting product details for postId: $postId")
               ProductDetails.query += ProductDetail(
                 postId,
                 details.productDetails,
@@ -51,10 +58,16 @@ class PostService @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit e
           }
         } yield Right[String, Long](postId)
       } else {
+        logger.warn(s"User not found for userId: $userId")
         DBIO.successful(Left[String, Long]("User not found"))
       }
     } yield result
-    db.run(action.transactionally)
+
+    db.run(action.transactionally).recover {
+      case e: Exception =>
+        logger.error(s"Failed to create post: ${e.getMessage}", e)
+        Left(s"Database error: ${e.getMessage}")
+    }
   }
 
   def getPost(postId: Long): Future[Option[PostWithDetails]] = {
