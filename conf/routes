@@ -23,3 +23,4 @@ GET     /posts/:postId/comments     controllers.CommentController.getComments(po
 POST    /posts/:postId/bookmark     controllers.BookmarkController.bookmark(postId: Long)
 DELETE  /posts/:postId/bookmark     controllers.BookmarkController.unbookmark(postId: Long)
 GET     /users/:userId/bookmarks    controllers.BookmarkController.getBookmarks(userId: Long)
+POST    /posts/:postId/bid/:userId     controllers.PostController.createBid(postId: Long, userId: Long)
