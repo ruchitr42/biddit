@@ -12,3 +12,15 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /                           controllers.Application.index
 POST    /users/register             controllers.UserController.register
 POST    /users/login                controllers.UserController.login
+POST    /:userId/post               controllers.PostController.create(userId: Long)
+GET     /posts/:postId              controllers.PostController.get(postId: Long)
+POST    /posts/:postId/like         controllers.LikeController.like(postId: Long)
+DELETE  /posts/:postId/like         controllers.LikeController.unlike(postId: Long)
+GET     /posts/:postId/likes        controllers.LikeController.getLikeCount(postId: Long)
+POST    /posts/:postId/likers       controllers.LikeController.getLikers(postId: Long)
+POST    /posts/:postId/comments     controllers.CommentController.addComment(postId: Long)
+GET     /posts/:postId/comments     controllers.CommentController.getComments(postId: Long)
+POST    /posts/:postId/bookmark     controllers.BookmarkController.bookmark(postId: Long)
+DELETE  /posts/:postId/bookmark     controllers.BookmarkController.unbookmark(postId: Long)
+GET     /users/:userId/bookmarks    controllers.BookmarkController.getBookmarks(userId: Long)
+POST    /posts/:postId/bid/:userId     controllers.PostController.createBid(postId: Long, userId: Long)
